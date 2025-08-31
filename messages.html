@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AskMyGP - Messages</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- NHS Header -->
+  <header class="nhs-header">
+    <div class="nhs-container">
+      <h1 class="nhs-logo">NHS</h1>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="nhs-container">
+    <h2 class="nhs-heading">Your Messages</h2>
+    <p>Here you can view messages from your GP practice. Use the tabs to filter your inbox.</p>
+
+    <!-- Filter Tabs -->
+    <div class="nhs-tabs">
+      <button class="nhs-tab active" data-filter="all">All</button>
+      <button class="nhs-tab" data-filter="unread">Unread</button>
+      <button class="nhs-tab" data-filter="sent">Sent</button>
+    </div>
+
+    <!-- Unread Counter (clickable) -->
+    <p id="unread-counter" data-filter="unread" style="cursor: pointer;">Unread (<span id="unread-count">0</span>)</p>
+
+    <!-- Mark All as Read Button -->
+    <button id="mark-all-read" class="nhs-mark-read" style="margin-bottom: 1rem;">Mark All as Read</button>
+
+    <!-- Messages -->
+    <div class="nhs-messages">
+      <!-- Unread -->
+      <div class="nhs-message nhs-message-unread" data-type="unread">
+        <h3>📩 Appointment Confirmation</h3>
+        <p>Your appointment for Tuesday 10th September at 10:30 AM has been confirmed.</p>
+        <small>Received: 29th August 2025</small>
+        <button class="nhs-mark-read">Mark as Read</button>
+      </div>
+
+      <!-- Read -->
+      <div class="nhs-message" data-type="read">
+        <h3>💊 Prescription Update</h3>
+        <p>Your repeat prescription for Asthma inhaler is ready to collect from your chosen pharmacy.</p>
+        <small>Received: 25th August 2025</small>
+      </div>
+
+      <!-- Read -->
+      <div class="nhs-message" data-type="read">
+        <h3>🧪 Test Results</h3>
+        <p>Your recent blood test results are normal. No further action is required.</p>
+        <small>Received: 20th August 2025</small>
+      </div>
+
+      <!-- Sent -->
+      <div class="nhs-message nhs-message-sent" data-type="sent">
+        <h3>📤 Message to GP</h3>
+        <p>“I would like to request a repeat prescription for my medication.”</p>
+        <small>Sent: 18th August 2025</small>
+      </div>
+    </div>
+
+    <a href="index.html" class="nhs-button">Return to Home</a>
+  </main>
+
+  <!-- NHS Footer -->
+  <footer class="nhs-footer">
+    <div class="nhs-container">
+      <p>&copy; 2025 NHS Digital. All rights reserved.</p>
+      <p><a href="#" class="nhs-link">Accessibility statement</a> | <a href="#" class="nhs-link">Privacy policy</a></p>
+    </div>
+  </footer>
+
+  <!-- Tab + Mark as Read + Unread Counter Script -->
+  <script>
+    const tabs = document.querySelectorAll(".nhs-tab");
+    const messages = document.querySelectorAll(".nhs-message");
+    const unreadCountEl = document.getElementById("unread-count");
+    const unreadCounter = document.getElementById("unread-counter");
+    const markAllBtn = document.getElementById("mark-all-read");
+
+    // Function to update unread badge and button visibility
+    function updateUnreadCount() {
+      const unreadMessages = document.querySelectorAll(".nhs-message-unread");
+      const count = unreadMessages.length;
+      unreadCountEl.textContent = count;
+
+      // Show/hide Mark All button based on unread messages
+      if (count > 0) {
+        markAllBtn.style.display = "inline-block";
+      } else {
+        markAllBtn.style.display = "none";
+      }
+    }
+
+    // Initial count on page load
+    updateUnreadCount();
+
+    // Helper to clear active states from tabs and badge
+    function clearActiveStates() {
+      tabs.forEach(t => t.classList.remove("active"));
+      unreadCounter.classList.remove("active-badge");
+    }
+
+    // Tab switching
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        clearActiveStates();
+        tab.classList.add("active");
+
+        const filter = tab.getAttribute("data-filter");
+        messages.forEach(msg => {
+          const type = msg.getAttribute("data-type");
+          if (filter === "all" || type === filter) {
+            msg.style.display = "block";
+          } else if (filter === "unread" && msg.classList.contains("nhs-message-unread")) {
+            msg.style.display = "block";
+          } else {
+            msg.style.display = "none";
+          }
+        });
+      });
+    });
+
+    // Make unread counter clickable like the "Unread" tab
+    unreadCounter.addEventListener("click", () => {
+      clearActiveStates();
+      unreadCounter.classList.add("active-badge");
+
+      const filter = unreadCounter.getAttribute("data-filter");
+      messages.forEach(msg => {
+        const type = msg.getAttribute("data-type");
+        if (filter === "all" || type === filter) {
+          msg.style.display = "block";
+        } else if (filter === "unread" && msg.classList.contains("nhs-message-unread")) {
+          msg.style.display = "block";
+        } else {
+          msg.style.display = "none";
+        }
+      });
+    });
+
+    // Mark individual messages as read
+    document.querySelectorAll(".nhs-mark-read").forEach(button => {
+      button.addEventListener("click", (e) => {
+        const message = e.target.closest(".nhs-message");
+
+        // Remove unread styling
+        message.classList.remove("nhs-message-unread");
+        message.setAttribute("data-type", "read");
+
+        // Remove button
+        e.target.remove();
+
+        // Update unread count
+        updateUnreadCount();
+      });
+    });
+
+    // Mark All as Read
+    markAllBtn.addEventListener("click", () => {
+      const unreadMessages = document.querySelectorAll(".nhs-message-unread");
+      unreadMessages.forEach(msg => {
+        msg.classList.remove("nhs-message-unread");
+        msg.setAttribute("data-type", "read");
+
+        // Remove individual button if present
+        const btn = msg.querySelector(".nhs-mark-read");
+        if (btn) btn.remove();
+      });
+
+      updateUnreadCount();
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+

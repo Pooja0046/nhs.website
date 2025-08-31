@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AskMyGP - Book Appointment</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .suggestion-box {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #005eb8;
+      background: #e6f4f9;
+      border-left: 4px solid #005eb8;
+      padding: 0.5rem;
+      border-radius: 4px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- NHS Header -->
+  <header class="nhs-header">
+    <div class="nhs-container">
+      <h1 class="nhs-logo">NHS</h1>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="nhs-container">
+    <h2 class="nhs-heading">Book an Appointment</h2>
+    <p>Please complete the form below to request an appointment with your GP practice.</p>
+
+    <!-- Appointment Form -->
+    <form action="appointment-confirmation.html" method="GET" class="nhs-form">
+      <label for="fullname" class="nhs-label">Full name</label>
+      <input type="text" id="fullname" name="fullname" class="nhs-input" required>
+
+      <label for="dob" class="nhs-label">Date of birth</label>
+      <input type="date" id="dob" name="dob" class="nhs-input" required>
+
+      <label for="reason" class="nhs-label">Reason for appointment</label>
+      <textarea id="reason" name="reason" class="nhs-input" rows="4" required></textarea>
+
+      <!-- Appointment Type -->
+      <label for="appointment-type" class="nhs-label">Appointment type</label>
+      <select id="appointment-type" name="appointment-type" class="nhs-input" required>
+        <option value="">-- Select appointment type --</option>
+        <option value="phone">Phone call</option>
+        <option value="video">Video consultation</option>
+        <option value="in-person">In-person at GP surgery</option>
+      </select>
+
+      <!-- Appointment Date -->
+      <label for="appointment-date" class="nhs-label">Select appointment date</label>
+      <input type="date" id="appointment-date" name="appointment-date" class="nhs-input" required>
+
+      <!-- Appointment Time -->
+      <label for="appointment-time" class="nhs-label">Select appointment time</label>
+      <select id="appointment-time" name="appointment-time" class="nhs-input" required>
+        <option value="">-- Choose a time --</option>
+      </select>
+
+      <!-- Suggestion box -->
+      <div id="suggestion" class="suggestion-box"></div>
+
+      <!-- Contact preference -->
+      <label for="contact" class="nhs-label">Preferred contact method</label>
+      <select id="contact" name="contact" class="nhs-input" required>
+        <option value="">-- Select an option --</option>
+        <option value="phone">Phone</option>
+        <option value="email">Email</option>
+        <option value="sms">Text message (SMS)</option>
+      </select>
+
+      <button type="submit" class="nhs-button">Submit Request</button>
+    </form>
+  </main>
+
+  <!-- NHS Footer -->
+  <footer class="nhs-footer">
+    <div class="nhs-container">
+      <p>&copy; 2025 NHS Digital. All rights reserved.</p>
+      <p><a href="#" class="nhs-link">Accessibility statement</a> | <a href="#" class="nhs-link">Privacy policy</a></p>
+    </div>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    const dateInput = document.getElementById("appointment-date");
+    const today = new Date().toISOString().split("T")[0];
+    dateInput.setAttribute("min", today);
+
+    const appointmentType = document.getElementById("appointment-type");
+    const appointmentTime = document.getElementById("appointment-time");
+    const suggestionBox = document.getElementById("suggestion");
+
+    const timeOptions = {
+      phone: [
+        {time: "09:00 AM", available: true},
+        {time: "09:30 AM", available: true},
+        {time: "10:00 AM", available: true},
+        {time: "10:30 AM", available: false},
+        {time: "11:00 AM", available: true},
+        {time: "02:00 PM", available: true},
+        {time: "02:30 PM", available: false},
+        {time: "03:00 PM", available: true},
+      ],
+      video: [
+        {time: "09:00 AM", available: true},
+        {time: "10:30 AM", available: true},
+        {time: "11:30 AM", available: true},
+        {time: "02:00 PM", available: false},
+      ],
+      "in-person": [
+        {time: "10:00 AM", available: true},
+        {time: "11:00 AM", available: false},
+        {time: "02:00 PM", available: true},
+        {time: "03:00 PM", available: true},
+      ]
+    };
+
+    // Prevent weekends + suggest next weekday
+    dateInput.addEventListener("input", function() {
+      const chosenDate = new Date(this.value);
+      if (chosenDate.getDay() === 0 || chosenDate.getDay() === 6) {
+        let nextDate = new Date(chosenDate);
+        while (nextDate.getDay() === 0 || nextDate.getDay() === 6) {
+          nextDate.setDate(nextDate.getDate() + 1);
+        }
+        const nextAvailable = nextDate.toISOString().split("T")[0];
+        alert("Appointments cannot be booked on weekends.");
+        suggestionBox.style.display = "block";
+        suggestionBox.textContent = "Next available date is " + nextAvailable;
+        this.value = "";
+      } else {
+        suggestionBox.style.display = "none";
+      }
+    });
+
+    // Populate time slots dynamically
+    appointmentType.addEventListener("change", function() {
+      const type = this.value;
+      appointmentTime.innerHTML = '<option value="">-- Choose a time --</option>';
+      suggestionBox.style.display = "none";
+
+      if (timeOptions[type]) {
+        timeOptions[type].forEach(slot => {
+          const option = document.createElement("option");
+          option.value = slot.time;
+          option.textContent = slot.available ? slot.time : `${slot.time} (Unavailable)`;
+          if (!slot.available) option.disabled = true;
+          appointmentTime.appendChild(option);
+        });
+      }
+    });
+
+    // Suggest next available time if chosen is unavailable
+    appointmentTime.addEventListener("change", function() {
+      const type = appointmentType.value;
+      const chosenTime = this.value;
+
+      if (!chosenTime || !timeOptions[type]) return;
+
+      const slots = timeOptions[type];
+      const currentIndex = slots.findIndex(s => s.time === chosenTime);
+
+      if (currentIndex !== -1 && slots[currentIndex].available === false) {
+        // find next available slot
+        const nextAvailable = slots.find((s, i) => i > currentIndex && s.available);
+        if (nextAvailable) {
+          suggestionBox.style.display = "block";
+          suggestionBox.textContent = "Next available time: " + nextAvailable.time;
+        } else {
+          suggestionBox.style.display = "block";
+          suggestionBox.textContent = "No later slots available today, please choose another date.";
+        }
+      } else {
+        suggestionBox.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
