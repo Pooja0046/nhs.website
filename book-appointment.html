@@ -19,11 +19,22 @@
   </style>
 </head>
 <body>
-  <!-- NHS Header -->
-  <header class="nhs-header">
-    <div class="nhs-container">
-      <h1 class="nhs-logo">NHS</h1>
+  <!-- NHS Header for sub-pages -->
+<header class="nhs-header">
+  <div class="nhs-container nhs-header-subpage">
+    
+    <!-- Logo + Back arrow stacked -->
+    <div class="logo-back-container">
+      <img src="assets/img/nhs logo.png" alt="NHS Logo" class="nhs-logo-img2">
+      <a href="index.html" class="back-arrow-button">← Back</a>
     </div>
+
+    <!-- Profile Icon -->
+    <a href="profile.html">
+      <img src="assets/img/profileicon.png" alt="Profile Icon" class="profile-icon">
+    </a>
+
+  </div>
   </header>
 
   <!-- Main Content -->
@@ -53,7 +64,10 @@
 
       <!-- Appointment Date -->
       <label for="appointment-date" class="nhs-label">Select appointment date</label>
-      <input type="date" id="appointment-date" name="appointment-date" class="nhs-input" required>
+      <input type="date" id="appointment-date" name="appointment-date" class="nhs-input" required>  
+
+       <!-- Suggestion box -->
+      <div id="suggestion" class="suggestion-box"></div>
 
       <!-- Appointment Time -->
       <label for="appointment-time" class="nhs-label">Select appointment time</label>
@@ -61,9 +75,7 @@
         <option value="">-- Choose a time --</option>
       </select>
 
-      <!-- Suggestion box -->
-      <div id="suggestion" class="suggestion-box"></div>
-
+   
       <!-- Contact preference -->
       <label for="contact" class="nhs-label">Preferred contact method</label>
       <select id="contact" name="contact" class="nhs-input" required>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AskMyGP - Health Advice</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- NHS Header for sub-pages -->
+<header class="nhs-header">
+  <div class="nhs-container nhs-header-subpage">
+    
+    <!-- Logo + Back arrow stacked -->
+    <div class="logo-back-container">
+      <img src="assets/img/nhs logo.png" alt="NHS Logo" class="nhs-logo-img2">
+      <a href="index.html" class="back-arrow-button">← Back</a>
+    </div>
+
+    <!-- Profile Icon -->
+    <a href="profile.html">
+      <img src="assets/img/profileicon.png" alt="Profile Icon" class="profile-icon">
+    </a>
+
+  </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="nhs-container">
+    <h2 class="nhs-heading">Health Advice</h2>
+    <p>Find trusted NHS health information and advice.</p>
+
+    <!-- Search -->
+    <div class="nhs-search">
+      <label for="advice-search" class="nhs-search__label">Search health topics</label>
+      <div class="nhs-search__controls">
+        <input id="advice-search" type="search" class="nhs-input" placeholder="Search health topics…" />
+        <button id="advice-search-btn" class="nhs-button">Search</button>
+        <button id="advice-clear-btn" class="nhs-button nhs-button--secondary">Clear</button>
+      </div>
+    </div>
+
+    <!-- Advice Categories (Accordions) -->
+    <div class="nhs-accordion-group">
+      <!-- Symptoms -->
+      <button class="nhs-accordion" aria-expanded="false">Symptoms</button>
+      <div class="nhs-accordion-panel" hidden>
+        <p>Advice for common symptoms (cough, fever, headaches). If you have severe chest pain, difficulty breathing, or symptoms of a stroke, call <strong>999</strong> immediately.</p>
+        <ul>
+          <li><a class="nhs-link" href="#" aria-label="Cough advice">Cough</a></li>
+          <li><a class="nhs-link" href="#" aria-label="Fever advice">Fever</a></li>
+          <li><a class="nhs-link" href="#" aria-label="Headache advice">Headaches</a></li>
+        </ul>
+      </div>
+
+      <!-- Mental Health -->
+      <button class="nhs-accordion" aria-expanded="false">Mental Health</button>
+      <div class="nhs-accordion-panel" hidden>
+        <p>Support for anxiety, low mood, stress and sleep. If you’re struggling to keep yourself safe, call <strong>999</strong> or go to A&amp;E.</p>
+        <ul>
+          <li><a class="nhs-link" href="#">Anxiety &amp; panic</a></li>
+          <li><a class="nhs-link" href="#">Depression &amp; low mood</a></li>
+          <li><a class="nhs-link" href="#">Sleep problems</a></li>
+        </ul>
+      </div>
+
+      <!-- Lifestyle & Wellbeing -->
+      <button class="nhs-accordion" aria-expanded="false">Lifestyle &amp; Wellbeing</button>
+      <div class="nhs-accordion-panel" hidden>
+        <p>Healthy eating, activity, stopping smoking, and alcohol support.</p>
+        <ul>
+          <li><a class="nhs-link" href="#">Healthy eating</a></li>
+          <li><a class="nhs-link" href="#">Get active</a></li>
+          <li><a class="nhs-link" href="#">Stop smoking</a></li>
+        </ul>
+      </div>
+
+      <!-- Medicines -->
+      <button class="nhs-accordion" aria-expanded="false">Medicines</button>
+      <div class="nhs-accordion-panel" hidden>
+        <p>How to take medicines safely, common side effects, and when to seek help.</p>
+        <ul>
+          <li><a class="nhs-link" href="#">Pain relief</a></li>
+          <li><a class="nhs-link" href="#">Antibiotics</a></li>
+          <li><a class="nhs-link" href="#">Side effects</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <p id="advice-no-results" class="nhs-muted" hidden>No results found. Try a different search term.</p>
+
+    <a href="index.html" class="nhs-button nhs-button--secondary">Return to Home</a>
+  </main>
+
+  <!-- NHS Footer -->
+  <footer class="nhs-footer">
+    <div class="nhs-container">
+      <p>&copy; 2025 NHS Digital. All rights reserved.</p>
+      <p><a href="#" class="nhs-link">Accessibility statement</a> | <a href="#" class="nhs-link">Privacy policy</a></p>
+    </div>
+  </footer>
+
+  <script>
+    // Accordion behaviour (one open at a time)
+    const accordionButtons = document.querySelectorAll('.nhs-accordion');
+    accordionButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        // close all
+        accordionButtons.forEach(b => {
+          b.setAttribute('aria-expanded', 'false');
+          b.nextElementSibling.hidden = true;
+        });
+        // open this one if it was closed
+        if (!expanded) {
+          btn.setAttribute('aria-expanded', 'true');
+          btn.nextElementSibling.hidden = false;
+        }
+      });
+    });
+
+    // Search filter
+    const searchInput = document.getElementById('advice-search');
+    const searchBtn = document.getElementById('advice-search-btn');
+    const clearBtn  = document.getElementById('advice-clear-btn');
+    const noResults = document.getElementById('advice-no-results');
+
+    function runFilter() {
+      const q = searchInput.value.trim().toLowerCase();
+      let anyVisible = false;
+
+      accordionButtons.forEach(btn => {
+        const panel = btn.nextElementSibling;
+        const haystack = (btn.textContent + ' ' + panel.textContent).toLowerCase();
+        const match = q === '' || haystack.includes(q);
+
+        // Show/hide
+        btn.style.display = match ? '' : 'none';
+        panel.style.display = match ? '' : 'none';
+
+        if (match) {
+          anyVisible = true;
+          // If searching, auto-open matches
+          if (q !== '') {
+            btn.setAttribute('aria-expanded', 'true');
+            panel.hidden = false;
+          } else {
+            btn.setAttribute('aria-expanded', 'false');
+            panel.hidden = true;
+          }
+        }
+      });
+
+      noResults.hidden = anyVisible;
+    }
+
+    searchBtn.addEventListener('click', runFilter);
+    searchInput.addEventListener('input', runFilter);
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      runFilter();
+    });
+
+    // Initial state
+    runFilter();
+  </script>
+</body>
+</html>
+

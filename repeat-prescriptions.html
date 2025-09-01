@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AskMyGP - Repeat Prescriptions</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    function requestRefill(prescriptionId) {
+      const button = document.getElementById("button-" + prescriptionId);
+      const confirmation = document.getElementById("confirmation-" + prescriptionId);
+
+      button.disabled = true;
+      button.innerText = "Requested ✔";
+      button.classList.add("nhs-button--disabled");
+
+      confirmation.style.display = "block";
+    }
+  </script>
+</head>
+<body>
+  <!-- NHS Header for sub-pages -->
+<header class="nhs-header">
+  <div class="nhs-container nhs-header-subpage">
+    
+    <!-- Logo + Back arrow stacked -->
+    <div class="logo-back-container">
+      <img src="assets/img/nhs logo.png" alt="NHS Logo" class="nhs-logo-img2">
+      <a href="index.html" class="back-arrow-button">← Back</a>
+    </div>
+
+    <!-- Profile Icon -->
+    <a href="profile.html">
+      <img src="assets/img/profileicon.png" alt="Profile Icon" class="profile-icon">
+    </a>
+
+  </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="nhs-container">
+    <h2 class="nhs-heading">Your Repeat Prescriptions</h2>
+    <p>Select the prescriptions you’d like to request a refill for.</p>
+
+    <div class="nhs-prescription-list">
+      <!-- Prescription Item -->
+      <div class="nhs-prescription">
+        <h3>Atorvastatin 20mg</h3>
+        <p>Take one tablet daily • 2 repeats left</p>
+        <button id="button-1" class="nhs-button" onclick="requestRefill(1)">Request Refill</button>
+        <p id="confirmation-1" class="nhs-confirmation-msg">✅ Request sent to your GP practice</p>
+      </div>
+
+      <div class="nhs-prescription">
+        <h3>Lisinopril 10mg</h3>
+        <p>Take one tablet daily • 3 repeats left</p>
+        <button id="button-2" class="nhs-button" onclick="requestRefill(2)">Request Refill</button>
+        <p id="confirmation-2" class="nhs-confirmation-msg">✅ Request sent to your GP practice</p>
+      </div>
+
+     <div class="nhs-prescription">
+  <h3>Metformin 500mg</h3>
+  <p>Take one tablet twice daily • 0 repeats left</p>
+  <p class="nhs-refill-unavailable">❌ No repeats available.</p>
+  <a href="contact.html" class="nhs-button nhs-button--secondary">Contact GP Practice</a>
+</div>
+
+    </div>
+
+    <a href="index.html" class="nhs-button nhs-button--secondary">Return to Home</a>
+  </main>
+
+  <!-- NHS Footer -->
+  <footer class="nhs-footer">
+    <div class="nhs-container">
+      <p>&copy; 2025 NHS Digital. All rights reserved.</p>
+      <p><a href="#" class="nhs-link">Accessibility statement</a> | <a href="#" class="nhs-link">Privacy policy</a></p>
+    </div>
+  </footer>
+</body>
+</html>
+
