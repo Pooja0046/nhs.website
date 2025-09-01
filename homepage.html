@@ -31,12 +31,14 @@
         <p>Arrange a GP appointment quickly and easily.</p>
       </a>
 
-      <a href="messages.html" class="dashboard-card messages-card">
+        <a href="messages.html" class="dashboard-card messages-card">
         <h3>View Messages</h3>
         <p>Check updates and messages from your GP.</p>
-        <!-- Unread badge -->
-        <span class="unread-badge" id="home-unread-count">0</span>
+
+        <!-- hp: Homepage-specific unread badge -->
+        <span id="hp-unread-count" class="hp-unread-badge" aria-hidden="false" aria-label="Unread messages">0</span>
       </a>
+
 
       <a href="repeat-prescriptions.html" class="dashboard-card">
         <h3>Repeat Prescriptions</h3>
@@ -68,40 +70,66 @@
     </div>
   </footer>
 
-  <!-- Script for Unread Badge -->
   <script>
-  // Example: number of unread messages
-  let unreadMessages = 1; // replace with dynamic value from messages page/server
+(function() {
+  const HP_LS_KEY = "hp_messagesViewed";     // unique storage key
+  let hpUnreadCount = 1;                     // <--- set this from server if needed
 
-  const unreadBadge = document.getElementById("home-unread-count");
-  const messagesCard = document.querySelector(".messages-card");
+  const hpBadge = document.getElementById("hp-unread-count");
+  const hpMessagesCard = document.querySelector(".messages-card");
 
-  function updateHomeUnreadBadge(count) {
-    // Check localStorage to see if user has viewed messages
-    const messagesViewed = localStorage.getItem("messagesViewed");
+  // Sanity checks - helpful for debugging
+  if (!hpBadge) {
+    console.warn("hp: #hp-unread-count not found on this page.");
+    return;
+  }
+  if (!hpMessagesCard) {
+    console.warn("hp: .messages-card not found on this page.");
+    return;
+  }
 
-    if (count > 0 && !messagesViewed) {
-      unreadBadge.textContent = count;
-      unreadBadge.style.display = "flex";
+  function hpUpdateBadge(count) {
+    const viewed = localStorage.getItem(HP_LS_KEY) === "true";
 
-      // Pulse animation for a few seconds
-      unreadBadge.classList.add("pulse");
-      setTimeout(() => {
-        unreadBadge.classList.remove("pulse");
-      }, 5000);
+    if (count > 0 && !viewed) {
+      hpBadge.textContent = count;
+      hpBadge.style.display = "flex";                        // show badge
+      // Inline animation is set so it's very hard to be overridden by other CSS
+      hpBadge.style.animation = "hp-pulse-anim 1s infinite";
+      hpBadge.classList.add("hp-pulse");                     // fallback class (CSS also covers this)
     } else {
-      unreadBadge.style.display = "none";
+      hpBadge.style.display = "none";
+      hpBadge.style.animation = "";
+      hpBadge.classList.remove("hp-pulse");
     }
   }
 
-  updateHomeUnreadBadge(unreadMessages);
+  // init
+  hpUpdateBadge(hpUnreadCount);
 
-  // When user clicks the Messages card, hide badge and save state
-  messagesCard.addEventListener("click", () => {
-    unreadBadge.style.display = "none";
-    localStorage.setItem("messagesViewed", "true");
+  // When user clicks the Messages card: hide the badge & save viewed state
+  hpMessagesCard.addEventListener("click", function() {
+    hpBadge.style.display = "none";
+    hpBadge.style.animation = "";
+    hpBadge.classList.remove("hp-pulse");
+    localStorage.setItem(HP_LS_KEY, "true");
   });
+
+  // Testing helper: call hpResetMessagesViewed() in console to clear the viewed flag
+  window.hpResetMessagesViewed = function(newCount = 1) {
+    localStorage.removeItem(HP_LS_KEY);
+    hpUnreadCount = newCount;
+    hpUpdateBadge(hpUnreadCount);
+    console.info("hp: Reset messagesViewed. Unread badge updated (count:", newCount, ").");
+  };
+
+  // Small debug helper to inspect inline animation value quickly:
+  window.hpGetBadgeAnimation = function() {
+    return hpBadge ? hpBadge.style.animation : null;
+  };
+})();
 </script>
+
 
 </body>
 </html>
