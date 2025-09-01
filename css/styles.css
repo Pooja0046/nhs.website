@@ -323,7 +323,7 @@ body {
 
 /*homepage*/
 
- /* Make Messages card relative for badge positioning */
+    /* Dashboard Cards */
     .dashboard-card {
       position: relative;
       display: block;
@@ -334,6 +334,7 @@ body {
       text-decoration: none;
       color: #212b32;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border-left: 10px solid #0072ce;
     }
 
     .dashboard-card:hover {
@@ -341,12 +342,20 @@ body {
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
+    /* Grid layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
     /* Unread badge */
     .unread-badge {
       position: absolute;
       top: 10px;
       right: 15px;
-      background-color: #d92b2b; /* red badge */
+      background-color: #d92b2b; /* red */
       color: white;
       font-size: 0.75rem;
       font-weight: bold;
@@ -367,14 +376,6 @@ body {
 
     .pulse {
       animation: pulse 1s infinite;
-    }
-
-    /* Grid layout */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-top: 20px;
     }
 
 
@@ -562,7 +563,7 @@ body {
 }
 
 .nhs-message-unread {
-  border-left: 4px solid #0072ce;
+  border-left: 10px solid #0072ce;
   background: #f0f8ff;
 }
 

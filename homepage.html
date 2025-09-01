@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AskMyGP - Home</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- NHS Header -->
+  <header class="nhs-header">
+    <div class="nhs-container nhs-header-flex">
+      <!-- NHS Logo -->
+      <img src="assets/img/nhs logo.png" alt="NHS Logo" class="nhs-logo-img">
+
+      <!-- Profile Icon -->
+      <a href="profile.html">
+        <img src="assets/img/profileicon.png" alt="Profile Icon" class="profile-icon">
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="nhs-container">
+    <h2 class="nhs-heading">Welcome, John Smith</h2>
+    <p>Select a service below to get started:</p>
+
+    <div class="dashboard-grid">
+      <a href="book-appointment.html" class="dashboard-card">
+        <h3>Book Appointment</h3>
+        <p>Arrange a GP appointment quickly and easily.</p>
+      </a>
+
+      <a href="messages.html" class="dashboard-card messages-card">
+        <h3>View Messages</h3>
+        <p>Check updates and messages from your GP.</p>
+        <!-- Unread badge -->
+        <span class="unread-badge" id="home-unread-count">0</span>
+      </a>
+
+      <a href="repeat-prescriptions.html" class="dashboard-card">
+        <h3>Repeat Prescriptions</h3>
+        <p>Order your regular medication online.</p>
+      </a>
+
+      <a href="health-advice.html" class="dashboard-card">
+        <h3>Health Advice</h3>
+        <p>Find trusted NHS health information.</p>
+      </a>
+    </div>
+  </main>
+
+  <!-- NHS Footer -->
+  <footer class="nhs-footer">
+    <div class="nhs-container">
+      <p>&copy; 2025 NHS Digital. All rights reserved.</p>
+      <p>
+        <a href="https://digital.nhs.uk/about-nhs-digital/our-work/website-and-digital-services/nhs-digital-accessibility-statement" 
+           class="nhs-link" target="_blank" rel="noopener noreferrer">
+          Accessibility statement
+        </a> 
+        | 
+        <a href="https://digital.nhs.uk/about-nhs-digital/our-work/keeping-patient-data-safe/how-we-look-after-your-health-and-care-information" 
+           class="nhs-link" target="_blank" rel="noopener noreferrer">
+          Privacy policy
+        </a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Script for Unread Badge -->
+  <script>
+  // Example: number of unread messages
+  let unreadMessages = 1; // replace with dynamic value from messages page/server
+
+  const unreadBadge = document.getElementById("home-unread-count");
+  const messagesCard = document.querySelector(".messages-card");
+
+  function updateHomeUnreadBadge(count) {
+    // Check localStorage to see if user has viewed messages
+    const messagesViewed = localStorage.getItem("messagesViewed");
+
+    if (count > 0 && !messagesViewed) {
+      unreadBadge.textContent = count;
+      unreadBadge.style.display = "flex";
+
+      // Pulse animation for a few seconds
+      unreadBadge.classList.add("pulse");
+      setTimeout(() => {
+        unreadBadge.classList.remove("pulse");
+      }, 5000);
+    } else {
+      unreadBadge.style.display = "none";
+    }
+  }
+
+  updateHomeUnreadBadge(unreadMessages);
+
+  // When user clicks the Messages card, hide badge and save state
+  messagesCard.addEventListener("click", () => {
+    unreadBadge.style.display = "none";
+    localStorage.setItem("messagesViewed", "true");
+  });
+</script>
+
+</body>
+</html>
+
+
+
+
+
