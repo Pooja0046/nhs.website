@@ -350,40 +350,7 @@ body {
       margin-top: 20px;
     }
 
-    /* ==== hp: homepage unread badge (homepage-scoped, unique names) ==== */
 
-/* hp-unread-badge: uniquely named so other pages/styles don't collide */
-.hp-unread-badge {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  background-color: #d92b2b;
-  color: #ffffff;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 3px 6px;
-  border-radius: 999px;
-  display: none;               /* shown by JS when appropriate */
-  justify-content: center;
-  align-items: center;
-  min-width: 22px;
-  min-height: 22px;
-  line-height: 1;
-  box-sizing: border-box;
-  z-index: 10;
-}
-
-/* fallback class-based pulse (very specific selector) */
-.dashboard-card.messages-card .hp-unread-badge.hp-pulse {
-  animation: hp-pulse-anim 1s infinite;
-}
-
-/* Unique keyframes name to avoid collisions */
-@keyframes hp-pulse-anim {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.25); }
-  100% { transform: scale(1); }
-}
 
 
 

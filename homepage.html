@@ -5,6 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AskMyGP - Home</title>
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* Pulsing unread badge (homepage only) */
+    .unread-badge-home {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: red;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 50%;
+      animation: pulse-home 1.5s infinite;
+    }
+
+    @keyframes pulse-home {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
 </head>
 <body>
   <!-- NHS Header -->
@@ -31,14 +52,11 @@
         <p>Arrange a GP appointment quickly and easily.</p>
       </a>
 
-        <a href="messages.html" class="dashboard-card messages-card">
+      <a href="messages.html" class="dashboard-card messages-card-home">
+        <span class="unread-badge-home">1</span>
         <h3>View Messages</h3>
         <p>Check updates and messages from your GP.</p>
-
-        <!-- hp: Homepage-specific unread badge -->
-        <span id="hp-unread-count" class="hp-unread-badge" aria-hidden="false" aria-label="Unread messages">0</span>
       </a>
-
 
       <a href="repeat-prescriptions.html" class="dashboard-card">
         <h3>Repeat Prescriptions</h3>
@@ -70,69 +88,31 @@
     </div>
   </footer>
 
+  <!-- Script to control badge -->
   <script>
-(function() {
-  const HP_LS_KEY = "hp_messagesViewed";     // unique storage key
-  let hpUnreadCount = 1;                     // <--- set this from server if needed
+    document.addEventListener("DOMContentLoaded", () => {
+      const messagesCard = document.querySelector(".messages-card-home");
+      const unreadBadge = messagesCard.querySelector(".unread-badge-home");
 
-  const hpBadge = document.getElementById("hp-unread-count");
-  const hpMessagesCard = document.querySelector(".messages-card");
+      // Show badge only if not already read in this session
+      if (!sessionStorage.getItem("messagesRead")) {
+        unreadBadge.style.display = "inline-block";
+      } else {
+        unreadBadge.style.display = "none";
+      }
 
-  // Sanity checks - helpful for debugging
-  if (!hpBadge) {
-    console.warn("hp: #hp-unread-count not found on this page.");
-    return;
-  }
-  if (!hpMessagesCard) {
-    console.warn("hp: .messages-card not found on this page.");
-    return;
-  }
-
-  function hpUpdateBadge(count) {
-    const viewed = localStorage.getItem(HP_LS_KEY) === "true";
-
-    if (count > 0 && !viewed) {
-      hpBadge.textContent = count;
-      hpBadge.style.display = "flex";                        // show badge
-      // Inline animation is set so it's very hard to be overridden by other CSS
-      hpBadge.style.animation = "hp-pulse-anim 1s infinite";
-      hpBadge.classList.add("hp-pulse");                     // fallback class (CSS also covers this)
-    } else {
-      hpBadge.style.display = "none";
-      hpBadge.style.animation = "";
-      hpBadge.classList.remove("hp-pulse");
-    }
-  }
-
-  // init
-  hpUpdateBadge(hpUnreadCount);
-
-  // When user clicks the Messages card: hide the badge & save viewed state
-  hpMessagesCard.addEventListener("click", function() {
-    hpBadge.style.display = "none";
-    hpBadge.style.animation = "";
-    hpBadge.classList.remove("hp-pulse");
-    localStorage.setItem(HP_LS_KEY, "true");
-  });
-
-  // Testing helper: call hpResetMessagesViewed() in console to clear the viewed flag
-  window.hpResetMessagesViewed = function(newCount = 1) {
-    localStorage.removeItem(HP_LS_KEY);
-    hpUnreadCount = newCount;
-    hpUpdateBadge(hpUnreadCount);
-    console.info("hp: Reset messagesViewed. Unread badge updated (count:", newCount, ").");
-  };
-
-  // Small debug helper to inspect inline animation value quickly:
-  window.hpGetBadgeAnimation = function() {
-    return hpBadge ? hpBadge.style.animation : null;
-  };
-})();
-</script>
-
-
+      // When clicked, hide and mark as read
+      messagesCard.addEventListener("click", () => {
+        unreadBadge.style.display = "none";
+        sessionStorage.setItem("messagesRead", "true");
+      });
+    });
+  </script>
 </body>
 </html>
+
+
+
 
 
 
