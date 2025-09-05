@@ -437,11 +437,11 @@ body {
 
 .nhs-confirmation-box {
   background: #f0f4f5;
-  border-left: 4px solid #007f3b;
+  border-left: 10px solid #0072ce;
   padding: 1rem;
   margin: 1.5rem 0;
   border-radius: 4px;
-}
+} 
 
 .nhs-confirmation-box h3 {
   margin-top: 0;
@@ -494,7 +494,7 @@ body {
 
 .nhs-confirmation-box {
   background: #f0f4f5;
-  border-left: 4px solid #007f3b;
+  border-left: 10px solid #0072ce;
   padding: 1rem;
   margin: 1.5rem 0;
   border-radius: 4px;
@@ -608,6 +608,27 @@ body {
   transition: transform 0.2s;
 }
 
+
+/* Inbox header layout */
+.inbox-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+#unread-counter {
+  margin: 0;
+  font-weight: bold;
+  color: #0072ce;
+  cursor: pointer;
+}
+
+#mark-all-read {
+  margin: 0;
+}
+
+
 .active-badge {
   background: #0072ce;
   color: #fff;
@@ -642,6 +663,30 @@ body {
 }
 
 
+/* Floating New Message Button */
+.floating-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #0072ce;
+  color: #fff;
+  font-size: 1.8rem;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+  text-decoration: none;
+  transition: background 0.3s, transform 0.2s;
+  z-index: 1000;
+}
+
+.floating-btn:hover {
+  background: #005eb8;
+  transform: scale(1.1);
+}
 
 
 

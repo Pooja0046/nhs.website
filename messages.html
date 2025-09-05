@@ -38,15 +38,18 @@
       <button class="nhs-tab" data-filter="sent">Sent</button>
     </div>
 
-    <!-- Unread Counter -->
-    <p id="unread-counter" data-filter="unread" style="cursor: pointer;">Unread (<span id="unread-count">0</span>)</p>
-
-    <!-- Mark All as Read -->
-    <button id="mark-all-read" class="nhs-mark-read" style="margin-bottom: 1rem;">Mark All as Read</button>
-
-    <!-- Inbox Messages -->
+        <!-- Inbox Section -->
     <div class="nhs-section">
+      <div class="inbox-header">
+        <!-- Left: Unread Counter -->
+        <p id="unread-counter" data-filter="unread">Unread (<span id="unread-count">0</span>)</p>
+        
+        <!-- Right: Mark All as Read -->
+        <button id="mark-all-read" class="nhs-mark-read">Mark All as Read</button>
+      </div>
+      
       <h3>Inbox</h3>
+
       <div id="inbox-messages" class="nhs-messages">
         <!-- Unread message -->
         <div class="nhs-message nhs-message-unread" data-type="unread">
@@ -77,6 +80,10 @@
         </div>
       </div>
     </div>
+
+     <a href="contact.html" class="floating-btn" title="Write a new message">
+    ✏️
+  </a>
 
     <a href="homepage.html" class="nhs-button">Return to Home</a>
   </main>
