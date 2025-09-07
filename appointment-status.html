@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Appointment - AskMyGP</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .status-container {
+      margin: 2rem auto;
+      max-width: 600px;
+      text-align: center;
+    }
+    .status-step {
+      position: relative;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-left: 6px solid #d8dde0;
+      background: #f9f9f9;
+      border-radius: 4px;
+      text-align: left;
+    }
+    .status-step.active {
+      border-left-color: #0072ce;
+      background: #e6f4f9;
+    }
+    .status-step.completed {
+      border-left-color: #28a745;
+      background: #f0fff4;
+    }
+    .status-step h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+    .status-step small {
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="nhs-header">
+    <div class="nhs-container nhs-header-subpage">
+      <div class="logo-back-container">
+        <img src="assets/img/nhs logo.png" alt="NHS Logo" class="nhs-logo-img2">
+        <a href="homepage.html" class="back-arrow-button">← Back</a>
+      </div>
+      <a href="profile.html">
+        <img src="assets/img/profileicon.png" alt="Profile Icon" class="profile-icon">
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="nhs-container">
+    <h2 class="nhs-heading">Track Your Appointment</h2>
+    <p>Here’s the current status of your request:</p>
+
+    <div class="status-container">
+      <div class="status-step completed">
+        <h3>📤 Request Submitted</h3>
+        <small>Your request has been sent successfully.</small>
+      </div>
+      <div class="status-step">
+        <h3>📥 GP Practice Received</h3>
+        <small>Your GP practice has received your request and is reviewing it.</small>
+      </div>
+      <div class="status-step">
+        <h3>✅ Appointment Confirmed</h3>
+        <small>You will receive confirmation of the date and time soon.</small>
+      </div>
+    </div>
+
+    <a href="homepage.html" class="nhs-button">Return to Home</a>
+  </main>
+
+  <!-- Footer -->
+  <footer class="nhs-footer">
+    <div class="nhs-container">
+      <p>&copy; 2025 NHS Digital. All rights reserved.</p>
+      <p><a href="#" class="nhs-link">Accessibility statement</a> | <a href="#" class="nhs-link">Privacy policy</a></p>
+    </div>
+  </footer>
+</body>
+</html>
